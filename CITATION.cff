@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+title: "AirVT-15k: A Multi-scenario, Application-oriented, Event-diverse Benchmark for Low-altitude UAV Video-Text Retrieval"
+message: "If you use AirVT-15k, please cite the dataset paper."
+type: dataset
+authors:
+  - family-names: "Chen"
+    given-names: "Xi"
+    affiliation: "School of Computer Science, Wuhan University"
+  - family-names: "Wei"
+    given-names: "Shuquan"
+    affiliation: "School of Computer Science, Wuhan University"
+  - family-names: "Chen"
+    given-names: "Xu"
+    affiliation: "School of Computer Science, Wuhan University"
+  - family-names: "Jia"
+    given-names: "Xiangyang"
+    affiliation: "School of Computer Science, Wuhan University"
+year: 2026

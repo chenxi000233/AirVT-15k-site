@@ -1,0 +1,15 @@
+# Keep the project-page repository lightweight.
+videos/
+annotations/
+metadata/manifest.jsonl
+metadata/captions.jsonl
+tmp/
+
+# Local runtime artifacts.
+*.log
+*.lock
+__pycache__/
+*.pyc
+
+# OS/editor files.
+.DS_Store

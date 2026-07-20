@@ -1,0 +1,66 @@
+{
+  "video_id": "015614",
+  "video": "videos/015614.mp4",
+  "scene": {
+    "category": "road",
+    "name": "night urban intersection"
+  },
+  "application": {
+    "task": "traffic_retrieval",
+    "description": "retrieving dense traffic and pedestrian activity from low-altitude UAV videos"
+  },
+  "events": [
+    "vehicle_movement",
+    "pedestrian_gathering",
+    "traffic_density",
+    "intersection_monitoring"
+  ],
+  "low_altitude_characteristics": [
+    "overhead_viewpoint",
+    "small_targets",
+    "weak_motion",
+    "background_redundancy"
+  ],
+  "captions": [
+    {
+      "english": "Dense nighttime traffic and pedestrians gather around a bright urban intersection.",
+      "chinese": "夜间明亮的城市路口周围聚集了密集车流和行人。"
+    },
+    {
+      "english": "Small vehicles move around crowded sidewalks and a complex road layout.",
+      "chinese": "小型车辆在拥挤人行道和复杂道路结构周围移动。"
+    },
+    {
+      "english": "Multiple vehicle streams pass through the intersection while pedestrians wait near the crosswalks.",
+      "chinese": "多股车流穿过路口，行人在斑马线附近等待通行。"
+    },
+    {
+      "english": "Vehicle density is high near the intersection, and pedestrians cluster along the sidewalks.",
+      "chinese": "路口附近车流密度较高，行人聚集在人行道两侧。"
+    },
+    {
+      "english": "Bright street lights and building signs create a challenging nighttime urban background.",
+      "chinese": "明亮路灯和建筑标识形成具有挑战性的夜间城市背景。"
+    },
+    {
+      "english": "Vehicles occupy several lanes, making fine-grained traffic state recognition necessary.",
+      "chinese": "车辆分布在多条车道上，需要进行细粒度交通状态识别。"
+    },
+    {
+      "english": "The clip shows both road geometry and moving targets within the same scene.",
+      "chinese": "视频同时呈现道路几何结构和场景中的移动目标。"
+    },
+    {
+      "english": "Pedestrians and vehicles appear small relative to the large intersection and surrounding buildings.",
+      "chinese": "相对于大型路口和周边建筑，行人和车辆目标尺寸较小。"
+    },
+    {
+      "english": "Cars and pedestrians share the same busy road area during nighttime traffic.",
+      "chinese": "夜间交通中，车辆和行人共同出现在繁忙道路区域。"
+    },
+    {
+      "english": "Bright buildings, road markings, and parked vehicles surround the moving traffic.",
+      "chinese": "明亮建筑、道路标线和停放车辆围绕着移动的车流。"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "dataset": "AirVT-15k",
+  "generated_at_utc": "2026-07-20T05:20:53Z",
+  "random_seed": 20260720,
+  "num_videos": 15573,
+  "num_annotations": 15573,
+  "num_caption_pairs": 155730,
+  "caption_count_distribution": {
+    "10": 15573
+  },
+  "splits": {
+    "train": {
+      "num_videos": 12458,
+      "num_caption_pairs": 124580,
+      "video_id_file": "metadata/splits/train.txt"
+    },
+    "val": {
+      "num_videos": 1557,
+      "num_caption_pairs": 15570,
+      "video_id_file": "metadata/splits/val.txt"
+    },
+    "test": {
+      "num_videos": 1558,
+      "num_caption_pairs": 15580,
+      "video_id_file": "metadata/splits/test.txt"
+    }
+  },
+  "all_video_id_file": "metadata/splits/all.txt"
+}

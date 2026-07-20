@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AirVT-15k: Low-altitude UAV Video-Text Retrieval Benchmark</title>
+  <meta name="description" content="AirVT-15k is a multi-scenario, application-oriented, event-diverse benchmark for low-altitude UAV video-text retrieval.">
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5a6577;
+      --paper: #ffffff;
+      --bg: #f5f7fb;
+      --line: #dce3ec;
+      --blue: #155c9f;
+      --green: #08746d;
+      --amber: #9a5b00;
+      --soft-blue: #edf5ff;
+      --soft-green: #edf9f5;
+      --soft-amber: #fff5e4;
+      --shadow: 0 16px 44px rgba(23, 32, 51, .10);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.62;
+      letter-spacing: 0;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px 34px;
+      border-bottom: 1px solid rgba(220, 227, 236, .88);
+      background: rgba(255, 255, 255, .92);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      color: #132844;
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .nav a {
+      color: #32435d;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 82vh;
+      display: flex;
+      align-items: end;
+      background-image: linear-gradient(90deg, rgba(9, 18, 31, .78), rgba(9, 18, 31, .34)), url("assets/posters/scenario_road_busy_intersection_009705.jpg");
+      background-size: cover;
+      background-position: center;
+      color: #ffffff;
+    }
+
+    .hero-inner {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 96px 0 72px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #cde5ff;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin: 0;
+      font-size: clamp(42px, 6vw, 74px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 860px;
+      margin: 20px 0 0;
+      color: rgba(255, 255, 255, .88);
+      font-size: 19px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255, 255, 255, .38);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .12);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      border-color: #ffffff;
+      background: #ffffff;
+      color: #10233d;
+    }
+
+    .section {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 56px 0;
+    }
+
+    .section + .section { border-top: 1px solid var(--line); }
+
+    h2 {
+      margin: 0 0 14px;
+      color: #172033;
+      font-size: 30px;
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.36;
+      letter-spacing: 0;
+    }
+
+    p { margin: 9px 0; }
+
+    .section-lead {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .stat {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(23, 32, 51, .05);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--blue);
+      font-size: 26px;
+      line-height: 1.1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .three {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .panel {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(23, 32, 51, .05);
+    }
+
+    .panel.blue { background: var(--soft-blue); }
+    .panel.green { background: var(--soft-green); }
+    .panel.amber { background: var(--soft-amber); }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 13px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid rgba(190, 202, 220, .8);
+      color: #2e405b;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .example-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .showcase-block {
+      margin-top: 28px;
+    }
+
+    .showcase-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .showcase-head p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .showcase-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      padding: 3px 2px 8px;
+    }
+
+    .showcase-strip .example {
+      min-width: 0;
+    }
+
+    .example {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(23, 32, 51, .06);
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #0f1724;
+      object-fit: cover;
+    }
+
+    .example-body {
+      padding: 13px 14px 15px;
+    }
+
+    .example-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 9px;
+    }
+
+    .mini {
+      display: inline-flex;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #eef3f8;
+      color: #394a64;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .caption-en {
+      color: #1f2f49;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .caption-zh {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: start;
+      margin-top: 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--paper);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef3f9;
+      color: #23344f;
+      font-weight: 760;
+    }
+
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      margin: 14px 0 0;
+      padding: 14px;
+      max-height: 360px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #101827;
+      color: #e6edf7;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .download {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(23, 32, 51, .05);
+    }
+
+    .download a {
+      display: inline-flex;
+      margin-top: 10px;
+      font-weight: 800;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .footer-inner {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 30px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1040px) {
+      .stats, .example-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .showcase-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .three, .download-grid, .split-grid { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; gap: 8px; padding: 12px 22px; }
+      .nav { width: 100%; }
+    }
+
+    @media (max-width: 640px) {
+      .hero { min-height: 78vh; }
+      .hero-inner, .section, .footer-inner { width: min(100% - 28px, 1180px); }
+      .hero-inner { padding: 72px 0 52px; }
+      h1 { font-size: 38px; }
+      .hero-copy { font-size: 16px; }
+      .stats, .example-grid { grid-template-columns: 1fr; }
+      .showcase-strip { grid-template-columns: 1fr; }
+      .nav { gap: 12px; }
+      .button { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">AirVT-15k</a>
+    <nav class="nav" aria-label="Page navigation">
+      <a href="#overview">Overview</a>
+      <a href="#coverage">Coverage</a>
+      <a href="#examples">Examples</a>
+      <a href="#format">Format</a>
+      <a href="#benchmark">Benchmark</a>
+      <a href="#download">Resources</a>
+      <a href="#citation">Citation</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Low-altitude UAV Video-Text Retrieval Benchmark</p>
+      <h1>AirVT-15k</h1>
+      <p class="hero-copy">
+        A multi-scenario, application-oriented, event-diverse benchmark for text-video retrieval in low-altitude UAV videos.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#examples">View Examples</a>
+        <a class="button" href="#benchmark">Benchmark Protocol</a>
+        <a class="button" href="#download">Resources</a>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="overview" class="section">
+      <h2>Dataset Overview</h2>
+      <p class="section-lead">
+        Existing text-video retrieval benchmarks are mainly built on general videos, while low-altitude UAV videos introduce overhead viewpoints, small objects, weak motion, redundant backgrounds, scene homogeneity, and domain-specific application semantics. AirVT-15k is designed to evaluate retrieval models under these low-altitude challenges.
+      </p>
+      <div class="stats">
+        <div class="stat"><strong>15,573</strong><span>low-altitude UAV videos</span></div>
+        <div class="stat"><strong>155,730</strong><span>video-text caption pairs</span></div>
+        <div class="stat"><strong>10</strong><span>caption pairs per video</span></div>
+        <div class="stat"><strong>2-way</strong><span>text-to-video and video-to-text retrieval</span></div>
+      </div>
+    </section>
+
+    <section id="coverage" class="section">
+      <h2>Coverage Design</h2>
+      <p class="section-lead">
+        AirVT-15k organizes low-altitude videos with three complementary design principles. Scenarios define the visual environment, applications define practical retrieval needs, and events define the video semantics.
+      </p>
+      <div class="three">
+        <div class="panel blue">
+          <h3>Multi-scenario Coverage</h3>
+          <p>Typical low-altitude visual environments with different backgrounds, targets, layouts, and event patterns.</p>
+          <div class="tag-list">
+            <span class="tag">Airport</span><span class="tag">Port</span><span class="tag">Road</span><span class="tag">Railway</span><span class="tag">Water</span><span class="tag">Urban</span><span class="tag">Industrial</span><span class="tag">Disaster</span>
+          </div>
+        </div>
+        <div class="panel green">
+          <h3>Application-oriented Design</h3>
+          <p>Scene and caption organization aligned with real low-altitude use cases.</p>
+          <div class="tag-list">
+            <span class="tag">Urban Inspection</span><span class="tag">Traffic Retrieval</span><span class="tag">Port Monitoring</span><span class="tag">Railway Inspection</span><span class="tag">Water Patrol</span><span class="tag">Disaster Response</span><span class="tag">Construction Analysis</span>
+          </div>
+        </div>
+        <div class="panel amber">
+          <h3>Diverse Event Semantics</h3>
+          <p>Events in UAV videos often appear as subtle state, direction, density, and region changes.</p>
+          <div class="tag-list">
+            <span class="tag">Static Observation</span><span class="tag">Object Moving</span><span class="tag">Entering / Leaving</span><span class="tag">Passing / Crossing</span><span class="tag">Turning</span><span class="tag">Docking</span><span class="tag">Density Change</span><span class="tag">Construction / Operation</span><span class="tag">Disaster Evolution</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="examples" class="section">
+      <h2>Visual Examples</h2>
+      <p class="section-lead">
+        The following curated demos show representative visual cases from AirVT-15k. Each card contains short tags, an English retrieval description, and a Chinese retrieval description.
+      </p>
+
+      <div class="showcase-block">
+        <div class="showcase-head">
+          <h3>Multi-scenario Coverage</h3>
+          <p>Four representative scene categories with different infrastructure, backgrounds, target types, and spatial layouts.</p>
+        </div>
+        <div class="showcase-strip">
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/scenario_airport_runway_tarmac_010502.jpg">
+              <source src="assets/demos/scenario_airport_runway_tarmac_010502.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Airport apron</span><span class="mini">Parked aircraft</span><span class="mini">Service truck</span></div>
+              <div class="caption-en">Multiple aircraft are parked on a rain-soaked airport apron while a service truck moves between them.</div>
+              <div class="caption-zh">多架飞机停放在雨后湿滑的机场停机坪上，一辆服务车辆在飞机之间行驶。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/scenario_port_container_terminal_005678.jpg">
+              <source src="assets/demos/scenario_port_container_terminal_005678.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Port terminal</span><span class="mini">Containers</span><span class="mini">Quay cranes</span></div>
+              <div class="caption-en">Stacks of containers, quay cranes, docked vessels, and distant mountains line the harbor.</div>
+              <div class="caption-zh">集装箱、岸桥和停靠船只沿港湾分布，远处可见山体。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/scenario_road_busy_intersection_009705.jpg">
+              <source src="assets/demos/scenario_road_busy_intersection_009705.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Urban road</span><span class="mini">Intersection</span><span class="mini">Vehicles</span></div>
+              <div class="caption-en">Cars move through a compact urban intersection beside parking lots and surrounding buildings.</div>
+              <div class="caption-zh">车辆穿行于紧凑的城市十字路口，周围分布着停车场和建筑物。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/scenario_industrial_construction_site_013345.jpg">
+              <source src="assets/demos/scenario_industrial_construction_site_013345.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Industrial district</span><span class="mini">Construction site</span><span class="mini">Cranes</span></div>
+              <div class="caption-en">Cranes, exposed earth, building frames, and large work areas fill the industrial site.</div>
+              <div class="caption-zh">工业区域内分布着起重机、裸露地面、建筑框架和大面积作业区。</div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="showcase-block">
+        <div class="showcase-head">
+          <h3>Application-oriented Design</h3>
+          <p>Four practical retrieval tasks for low-altitude monitoring, search, and emergency interpretation.</p>
+        </div>
+        <div class="showcase-strip">
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/application_airport_operation_monitoring_015601.jpg">
+              <source src="assets/demos/application_airport_operation_monitoring_015601.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Operation monitoring</span><span class="mini">Ground service</span><span class="mini">Moving aircraft</span></div>
+              <div class="caption-en">An aircraft moves through the runway area while service vehicles operate nearby.</div>
+              <div class="caption-zh">一架飞机在跑道区域移动，周边服务车辆正在作业。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/application_port_monitoring_crane_ship_009808.jpg">
+              <source src="assets/demos/application_port_monitoring_crane_ship_009808.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Berth monitoring</span><span class="mini">Cargo logistics</span><span class="mini">Dock activity</span></div>
+              <div class="caption-en">A container ship is berthed beside quay cranes and stacked cargo, with vehicles moving along the dock.</div>
+              <div class="caption-zh">集装箱船停靠在岸桥和堆放货物旁，车辆沿码头道路行驶。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/application_road_traffic_retrieval_015614.jpg">
+              <source src="assets/demos/application_road_traffic_retrieval_015614.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Traffic retrieval</span><span class="mini">Intersection monitoring</span><span class="mini">Dense flow</span></div>
+              <div class="caption-en">Dense vehicles and pedestrians gather around a bright nighttime intersection.</div>
+              <div class="caption-zh">夜间明亮的路口周围聚集着密集车流和行人。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/application_disaster_response_fire_000385.jpg">
+              <source src="assets/demos/application_disaster_response_fire_000385.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Emergency response</span><span class="mini">Fire monitoring</span><span class="mini">Rescue assessment</span></div>
+              <div class="caption-en">Visible flames, heavy smoke, and rescue vehicles surround a burning residential area.</div>
+              <div class="caption-zh">住宅区域出现明火和浓烟，周围有救援车辆停靠。</div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="showcase-block">
+        <div class="showcase-head">
+          <h3>Diverse Event Semantics</h3>
+          <p>Four event semantics that require temporal understanding beyond static scene recognition.</p>
+        </div>
+        <div class="showcase-strip">
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/event_static_observation_urban_012855.jpg">
+              <source src="assets/demos/event_static_observation_urban_012855.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Static observation</span><span class="mini">Urban layout</span><span class="mini">Building density</span></div>
+              <div class="caption-en">Dense buildings, narrow streets, and compact urban blocks remain nearly static throughout the clip.</div>
+              <div class="caption-zh">密集建筑、狭窄街道和紧凑城区在视频中基本保持静止。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/event_object_moving_train_013408.jpg">
+              <source src="assets/demos/event_object_moving_train_013408.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Object moving</span><span class="mini">Train</span><span class="mini">Curved rails</span></div>
+              <div class="caption-en">A train moves along curved railway tracks beside signals and overhead equipment.</div>
+              <div class="caption-zh">列车沿弯曲铁路轨道行驶，旁边分布着信号设备和接触网设施。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/event_enter_leave_speedboat_010905.jpg">
+              <source src="assets/demos/event_enter_leave_speedboat_010905.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Entering / leaving</span><span class="mini">Speedboat</span><span class="mini">Wake trail</span></div>
+              <div class="caption-en">A speedboat departs from the harbor area and leaves a long white wake across open water.</div>
+              <div class="caption-zh">快艇从港湾区域驶离，在开阔水面上留下长长的白色尾迹。</div>
+            </div>
+          </article>
+
+          <article class="example">
+            <video controls preload="metadata" poster="assets/posters/event_passing_crossing_train_bridge_000698.jpg">
+              <source src="assets/demos/event_passing_crossing_train_bridge_000698.mp4" type="video/mp4">
+            </video>
+            <div class="example-body">
+              <div class="example-meta"><span class="mini">Passing / crossing</span><span class="mini">Rail crossing</span><span class="mini">Train</span></div>
+              <div class="caption-en">A train passes through a road-level railway crossing beside waiting vehicles and nearby buildings.</div>
+              <div class="caption-zh">列车通过道路平交口，附近有等待车辆和周边建筑。</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="format" class="section">
+      <h2>Annotation Format</h2>
+      <p class="section-lead">
+        Each annotation contains video metadata, scene category, application task, event semantics, low-altitude characteristics, and ten English-Chinese caption pairs. A full sample is available at <a href="samples/annotation_sample.json">samples/annotation_sample.json</a>.
+      </p>
+      <pre><code>{
+  "video_id": "015614",
+  "video": "videos/015614.mp4",
+  "scene": {
+    "category": "road",
+    "name": "night urban intersection"
+  },
+  "application": {
+    "task": "traffic_retrieval",
+    "description": "retrieving dense traffic and pedestrian activity from low-altitude UAV videos"
+  },
+  "events": [
+    "vehicle_movement",
+    "pedestrian_gathering",
+    "traffic_density"
+  ],
+  "low_altitude_characteristics": [
+    "overhead_viewpoint",
+    "small_targets",
+    "background_redundancy"
+  ],
+  "captions": [
+    {
+      "english": "Dense nighttime traffic and pedestrians gather around a bright urban intersection.",
+      "chinese": "夜间明亮的城市路口周围聚集了密集车流和行人。"
+    },
+    {
+      "english": "Small vehicles move around crowded sidewalks and a complex road layout.",
+      "chinese": "小型车辆在拥挤人行道和复杂道路结构周围移动。"
+    },
+    ...
+  ]
+}</code></pre>
+    </section>
+
+    <section id="benchmark" class="section">
+      <h2>Benchmark Protocol</h2>
+      <p class="section-lead">
+        The benchmark evaluates bidirectional retrieval with R@1, R@5, R@10, and mR. Here mR denotes the mean of R@1, R@5, and R@10.
+      </p>
+      <div class="split-grid">
+        <div>
+          <h3>Official Split</h3>
+          <table>
+            <thead>
+              <tr><th>Split</th><th>Videos</th><th>Caption pairs</th><th>File</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Train</td><td>12,458</td><td>124,580</td><td><a href="downloads/splits/train.txt">train.txt</a></td></tr>
+              <tr><td>Val</td><td>1,557</td><td>15,570</td><td><a href="downloads/splits/val.txt">val.txt</a></td></tr>
+              <tr><td>Test</td><td>1,558</td><td>15,580</td><td><a href="downloads/splits/test.txt">test.txt</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Tasks and Metrics</h3>
+          <table>
+            <thead>
+              <tr><th>Task</th><th>Query</th><th>Target</th><th>Metrics</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>T2V</td><td>Text</td><td>Video</td><td>R@1 / R@5 / R@10 / mR</td></tr>
+              <tr><td>V2T</td><td>Video</td><td>Text</td><td>R@1 / R@5 / R@10 / mR</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>Baseline Results</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th><th>T2V R@1</th><th>T2V R@5</th><th>T2V R@10</th><th>T2V mR</th><th>V2T R@1</th><th>V2T R@5</th><th>V2T R@10</th><th>V2T mR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>CLIP Frame Pooling</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>CLIP4Clip</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>X-CLIP</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>Ours</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="download" class="section">
+      <h2>Resources</h2>
+      <p class="section-lead">
+        Official split files, evaluation code, and sample annotations are provided for reproducible text-video retrieval experiments.
+      </p>
+      <div class="download-grid">
+        <div class="download">
+          <h3>Evaluation Script</h3>
+          <p>Official script and submission examples for T2V and V2T retrieval.</p>
+          <a href="downloads/evaluation/evaluate_retrieval.py">evaluate_retrieval.py</a>
+        </div>
+        <div class="download">
+          <h3>Official Splits</h3>
+          <p>Train, validation, and test video-id lists for reproducible experiments.</p>
+          <a href="downloads/split_summary.json">split_summary.json</a>
+        </div>
+        <div class="download">
+          <h3>Sample Annotation</h3>
+          <p>One structured JSON annotation with scene, application, event, low-altitude, and bilingual caption fields.</p>
+          <a href="samples/annotation_sample.json">annotation_sample.json</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="citation" class="section">
+      <h2>Citation</h2>
+      <p><strong>Authors:</strong> Xi Chen, Shuquan Wei, Xu Chen, Xiangyang Jia</p>
+      <p><strong>Affiliation:</strong> School of Computer Science, Wuhan University</p>
+      <pre><code>@misc{airvt15k2026,
+  title        = {AirVT-15k: A Multi-scenario, Application-oriented, Event-diverse Benchmark for Low-altitude UAV Video-Text Retrieval},
+  author       = {Xi Chen and Shuquan Wei and Xu Chen and Xiangyang Jia},
+  institution  = {School of Computer Science, Wuhan University},
+  year         = {2026},
+  note         = {Dataset and benchmark}
+}</code></pre>
+      <h3>Contact</h3>
+      <p>Email: <a href="mailto:2024102110094@whu.edu.cn">2024102110094@whu.edu.cn</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      AirVT-15k project page.
+    </div>
+  </footer>
+</body>
+</html>
