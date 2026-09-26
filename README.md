@@ -6,37 +6,6 @@ This directory contains the GitHub Pages project site for AirVT-15k.
 
 🌐 **Project Page:** https://chenxi000233.github.io/AirVT-15k-site/
 
-## Contents
-
-```text
-AirVT-15k-site/
-├── index.html                         # Project homepage
-├── assets/
-│   ├── demos/                         # Compressed curated demo videos for visualization
-│   ├── posters/                       # Poster images for the curated demos
-│   └── figures/                       # Optional figures
-├── downloads/
-│   ├── evaluation/                    # Evaluation script and submission examples
-│   ├── splits/                        # Train/val/test split id files
-│   └── split_summary.json             # Split statistics
-├── samples/
-│   └── annotation_sample.json          # One annotation example
-├── CITATION.cff                       # Citation metadata
-├── LICENSE.md                         # License information
-└── README.md                          # This file
-```
-
-## Local Server
-
-```bash
-cd /data/chenxi/rs-video/AirVT-15k-site
-python3 -m http.server 8000
-```
-
-Then open:
-
-```text
-http://localhost:8000
 ```
 
 ## GitHub Pages Deployment
